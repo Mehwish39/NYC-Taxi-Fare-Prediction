@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NYC Taxi Fare Prediction</title>
+</head>
+<body>
+  <h2>Enter Ride Details</h2>
+  <form id="fare-form">
+    <label>Passenger Count: <input type="number" id="passenger_count" required></label><br><br>
+    <label>Pickup Latitude: <input type="number" id="pickup_latitude" step="any" required></label><br><br>
+    <label>Pickup Longitude: <input type="number" id="pickup_longitude" step="any" required></label><br><br>
+    <label>Dropoff Latitude: <input type="number" id="dropoff_latitude" step="any" required></label><br><br>
+    <label>Dropoff Longitude: <input type="number" id="dropoff_longitude" step="any" required></label><br><br>
+    <label>Hour: <input type="number" id="hour" required></label><br><br>
+    <label>Distance (km): <input type="number" id="distance_km" step="any" required></label><br><br>
+    <label>Is Peak Hour? (0 or 1): <input type="number" id="is_peak_hour" required></label><br><br>
+    <button type="submit">Predict Fare</button>
+  </form>
+
+  <h3 id="result"></h3>
+
+  <script>
+    document.getElementById('fare-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = {
+        passenger_count: +document.getElementById('passenger_count').value,
+        pickup_latitude: +document.getElementById('pickup_latitude').value,
+        pickup_longitude: +document.getElementById('pickup_longitude').value,
+        dropoff_latitude: +document.getElementById('dropoff_latitude').value,
+        dropoff_longitude: +document.getElementById('dropoff_longitude').value,
+        hour: +document.getElementById('hour').value,
+        distance_km: +document.getElementById('distance_km').value,
+        is_peak_hour: +document.getElementById('is_peak_hour').value
+      };
+
+      const response = await fetch('http://127.0.0.1:8000/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById('result').textContent = `Predicted Fare: $${result.predicted_fare}`;
+    });
+  </script>
+</body>
+</html>
