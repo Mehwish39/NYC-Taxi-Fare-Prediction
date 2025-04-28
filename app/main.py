@@ -6,6 +6,15 @@ import numpy as np
 # Create the FastAPI app
 app = FastAPI()
 
+# ADD THIS: Allow frontend (browser) to talk to FastAPI backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Load your trained model
 model = joblib.load("../models/gbr_model_v2.pkl")  # change if using another model
 
